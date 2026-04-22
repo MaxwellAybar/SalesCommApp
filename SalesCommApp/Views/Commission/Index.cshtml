@@ -1,0 +1,31 @@
+﻿@model SalesCommApp.Models.CommissionModel
+
+<h2>Sales Commission Calculator</h2>
+
+<form method="post">
+    <div>
+        <label>Ventas:</label>
+        <input type="number" step="0.01" asp-for="Sales" required />
+    </div>
+
+    <div>
+        <label>Descuentos:</label>
+        <input type="number" step="0.01" asp-for="Discount" required />
+    </div>
+
+    <div>
+        <label>País:</label>
+        <select asp-for="Country">
+            <option value="India">India</option>
+            <option value="US">US</option>
+            <option value="UK">UK</option>
+        </select>
+    </div>
+
+    <button type="submit">Calcular</button>
+</form>
+
+@if (Model != null)
+{
+    <h3>Comisión: @Model.Result</h3>
+}
