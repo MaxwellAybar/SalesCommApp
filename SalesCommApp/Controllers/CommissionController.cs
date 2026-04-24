@@ -1,12 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SalesCommApp.Models;
-using SalesCommApp.Services;
+using SalesCommApp.Application.DTOs;
+using SalesCommApp.Infrastructure.Services;
 
 namespace SalesCommApp.Controllers
 {
     public class CommissionController : Controller
     {
-        private readonly CommissionService _service = new CommissionService();
+        private readonly CommissionService _service;
+
+        public CommissionController(CommissionService service)
+        {
+            _service = service;
+        }
 
         public IActionResult Index()
         {
@@ -16,7 +22,18 @@ namespace SalesCommApp.Controllers
         [HttpPost]
         public IActionResult Index(CommissionModel model)
         {
-            model.Result = _service.Calculate(model.Country, model.Sales, model.Discount);
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var dto = new CommissionDTO
+            {
+                Sales = model.Sales,
+                Discount = model.Discount,
+                Country = model.Country
+            };
+
+            model.Result = _service.Calculate(dto);
+
             return View(model);
         }
     }
